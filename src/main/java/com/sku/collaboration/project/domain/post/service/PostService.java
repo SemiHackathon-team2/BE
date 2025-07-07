@@ -11,6 +11,8 @@ import com.sku.collaboration.project.domain.user.entity.User;
 import com.sku.collaboration.project.domain.user.exception.UserErrorCode;
 import com.sku.collaboration.project.domain.user.repository.UserRepository;
 import com.sku.collaboration.project.global.exception.CustomException;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -63,6 +65,14 @@ public class PostService {
     log.info("[서비스]게시글 생성 완료: id= {}, title= {}, content={}", post.getId(), post.getTitle(),
         post.getContent());
     return PostResponse.of(post); //그리고, 저장된 결과(Entity)를 DTO로 변환해서 반환!!
+  }
+
+  @Transactional(readOnly = true)
+  public List<PostResponse> getPostsByBoard(Long boardId) {
+    List<Post> posts = postRepository.findAllByBoardId(boardId);
+    return posts.stream()
+        .map(PostResponse::of)
+        .collect(Collectors.toList());
   }
 
 }
