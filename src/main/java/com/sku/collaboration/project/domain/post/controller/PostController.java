@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api")  //이 클래스에서 모든 API경로 앞에 공통적으로 붙을 주소 설정!!
 @Tag(name = "Post", description = "게시글 관련 API")
-//스웨거용 어노테이션. 이 컨트롤러가 Post관련 API임을 명시! -> API 문서에서 분류됨
 public class PostController {
 
   private final PostService postService;
