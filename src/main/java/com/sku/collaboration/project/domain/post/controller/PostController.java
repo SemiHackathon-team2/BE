@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-//사용자의 요청을 받아서, 그에 맞는 서비스 로직을 호출하고, 결과를 응답으로 반환하는 역할!!
 @RestController  //API요청을 처리하는 컨트롤러임을 명시!
 @RequiredArgsConstructor
 @RequestMapping("/api")  //이 클래스에서 모든 API경로 앞에 공통적으로 붙을 주소 설정!!
