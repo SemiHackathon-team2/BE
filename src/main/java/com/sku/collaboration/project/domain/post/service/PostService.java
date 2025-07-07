@@ -1,0 +1,61 @@
+package com.sku.collaboration.project.domain.post.service;
+
+import com.sku.collaboration.project.domain.post.dto.request.CreatePostRequest;
+import com.sku.collaboration.project.domain.post.dto.response.PostResponse;
+import com.sku.collaboration.project.domain.post.entity.Post;
+import com.sku.collaboration.project.domain.post.exception.PostErrorCode;
+import com.sku.collaboration.project.domain.post.repository.PostRepository;
+import com.sku.collaboration.project.domain.user.entity.User;
+import com.sku.collaboration.project.domain.user.exception.UserErrorCode;
+import com.sku.collaboration.project.domain.user.repository.UserRepository;
+import com.sku.collaboration.project.global.exception.CustomException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class PostService {
+
+  private final PostRepository postRepository;
+  private final UserRepository userRepository;
+
+  @Transactional
+  public PostResponse createPost(CreatePostRequest createPostRequest) { //DTO를 인자로 받아,
+    log.info("[서비스] 게시글 생성 시도: title={}, content={}, isAnonymous={}, userId={}",
+        createPostRequest.getTitle(),
+        createPostRequest.getContent(),
+        createPostRequest.isAnonymous(),
+        createPostRequest.getUserId());
+
+    if (createPostRequest.getTitle() == null || createPostRequest.getTitle().isBlank()) {
+      throw new CustomException(PostErrorCode.INVALID_POST_TITLE);
+    }
+
+    if (createPostRequest.getContent() == null || createPostRequest.getContent().isBlank()) {
+      throw new CustomException(PostErrorCode.INVALID_POST_CONTENT);
+    }
+
+    if (createPostRequest.getTitle().length() > 30) {
+      throw new CustomException(PostErrorCode.TITLE_TOO_LONG);
+    }
+
+    User user = userRepository.findById(createPostRequest.getUserId())
+        .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
+
+    Post post = Post.builder()  //DTO -> Entity 변환 후!
+        .title(createPostRequest.getTitle()) //프론트에서 보낸 "title" 값을 Post 객체의 필드로 넣는 과정
+        .content(createPostRequest.getContent())
+        .isAnonymous(createPostRequest.isAnonymous())  // ✅ 익명 여부 저장
+        .user(user)
+        .build();
+    postRepository.save(post);  //Post 객체를 DB에 저장!!
+
+    log.info("[서비스]게시글 생성 완료: id= {}, title= {}, content={}", post.getId(), post.getTitle(),
+        post.getContent());
+    return PostResponse.of(post); //그리고, 저장된 결과(Entity)를 DTO로 변환해서 반환!!
+  }
+
+}
