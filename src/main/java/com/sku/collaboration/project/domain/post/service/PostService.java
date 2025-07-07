@@ -3,6 +3,7 @@ package com.sku.collaboration.project.domain.post.service;
 import com.sku.collaboration.project.domain.board.entity.Board;
 import com.sku.collaboration.project.domain.board.repository.BoardRepository;
 import com.sku.collaboration.project.domain.post.dto.request.CreatePostRequest;
+import com.sku.collaboration.project.domain.post.dto.request.UpdatePostRequest;
 import com.sku.collaboration.project.domain.post.dto.response.PostResponse;
 import com.sku.collaboration.project.domain.post.entity.Post;
 import com.sku.collaboration.project.domain.post.exception.PostErrorCode;
@@ -73,6 +74,38 @@ public class PostService {
     return posts.stream()
         .map(PostResponse::of)
         .collect(Collectors.toList());
+  }
+
+  @Transactional(readOnly = true)
+  public PostResponse getPost(Long postId) {
+    Post post = postRepository.findById(postId)
+        .orElseThrow(() -> new CustomException(PostErrorCode.POST_NOT_FOUND));
+
+    return PostResponse.of(post);
+  }
+
+  @Transactional
+  public PostResponse updatePost(Long postId, UpdatePostRequest request) {
+    Post post = postRepository.findById(postId)
+        .orElseThrow(() -> new CustomException(PostErrorCode.POST_NOT_FOUND));
+
+    post.update(request.getTitle(), request.getContent());
+    post.setIsAnonymous(request.isAnonymous());
+
+    log.info("[서비스] 게시글 수정 완료: id={}, title={}, isAnonymous={}",
+        post.getId(), post.getTitle(), post.getIsAnonymous());
+
+    return PostResponse.of(post);
+  }
+
+  @Transactional
+  public void deletePost(Long postId) {
+    Post post = postRepository.findById(postId)
+        .orElseThrow(() -> new CustomException(PostErrorCode.POST_NOT_FOUND));
+
+    postRepository.delete(post);
+
+    log.info("[서비스] 게시글 삭제 완료: id={}", postId);
   }
 
 }
