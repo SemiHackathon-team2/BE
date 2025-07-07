@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController  //API요청을 처리하는 컨트롤러임을 명시!
 @RequiredArgsConstructor
-@RequestMapping("/api")  //이 클래스에서 모든 API경로 앞에 공통적으로 붙을 주소 설정!!
+@RequestMapping("/api")
 @Tag(name = "Post", description = "게시글 관련 API")
 public class PostController {
 
