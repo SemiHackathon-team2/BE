@@ -75,6 +75,13 @@ public class PostController {
     return ResponseEntity.ok(BaseResponse.success("요약 성공", summary));
   }
 
+  @Operation(summary = "댓글 반응 요약", description = "GPT를 이용하여 댓글들의 전반적인 반응을 요약해줍니다.")
+  @GetMapping("/posts/{postId}/comments/summary")
+  public ResponseEntity<BaseResponse<String>> summarizeComments(@PathVariable Long postId) {
+    String summary = postService.summarizeCommentsForPost(postId);
+    return ResponseEntity.ok(BaseResponse.success("댓글 요약 성공", summary));
+  }
+
 
 
 }

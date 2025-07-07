@@ -59,4 +59,15 @@ public class GPTUtil {
     Map<String, Object> messageMap = (Map<String, Object>) ((Map<?, ?>) choices.get(0)).get("message");
     return (String) messageMap.get("content");
   }
+
+  public String summarizeComments(List<String> comments) {
+    String joined = String.join("\n", comments);
+
+    String prompt = """
+    다음은 어떤 게시글에 달린 댓글 목록이야. 이 댓글들의 전반적인 반응을 요약해줘.
+    감정적인 표현은 피하고, 자주 등장하는 주제나 톤을 중립적으로 정리해줘.
+    \n\n""" + joined;
+
+    return summarize(prompt); // 너가 기존에 만든 gpt 호출 메서드 재활용
+  }
 }

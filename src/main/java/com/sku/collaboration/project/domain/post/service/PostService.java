@@ -2,6 +2,7 @@ package com.sku.collaboration.project.domain.post.service;
 
 import com.sku.collaboration.project.domain.board.entity.Board;
 import com.sku.collaboration.project.domain.board.repository.BoardRepository;
+import com.sku.collaboration.project.domain.comment.service.CommentService;
 import com.sku.collaboration.project.domain.post.dto.request.CreatePostRequest;
 import com.sku.collaboration.project.domain.post.dto.request.UpdatePostRequest;
 import com.sku.collaboration.project.domain.post.dto.response.PostResponse;
@@ -29,6 +30,7 @@ public class PostService {
   private final UserRepository userRepository;
   private final BoardRepository boardRepository;
   private final GPTUtil gptUtil;
+  private final CommentService commentService;
 
   @Transactional
   public PostResponse createPost(CreatePostRequest createPostRequest) { //DTO를 인자로 받아,
@@ -117,5 +119,18 @@ public class PostService {
 
     return gptUtil.summarize(post.getContent());
   }
+
+  @Transactional
+  public String summarizeCommentsForPost(Long postId) {
+    List<String> comments = commentService.getCommentContentsByPost(postId);
+
+    if (comments.isEmpty()) {
+      return "아직 댓글이 없어 요약할 수 없습니다.";
+    }
+
+    return gptUtil.summarizeComments(comments);
+  }
+
+
 
 }

@@ -52,4 +52,11 @@ public class CommentService {
     public void deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);
     }
+
+    @Transactional(readOnly = true)
+    public List<String> getCommentContentsByPost(Long postId) {
+        return commentRepository.findByPostId(postId).stream()
+            .map(Comment::getContent)
+            .toList();
+    }
 }
