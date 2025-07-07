@@ -68,6 +68,13 @@ public class PostController {
     return ResponseEntity.ok(BaseResponse.success("게시글 삭제 성공", null));
   }
 
+  @Operation(summary = "게시글 요약", description = "GPT를 통해 게시글 내용을 요약합니다.")
+  @PostMapping("/posts/{postId}/summary")
+  public ResponseEntity<BaseResponse<String>> summarizePost(@PathVariable Long postId) {
+    String summary = postService.summarizePost(postId);
+    return ResponseEntity.ok(BaseResponse.success("요약 성공", summary));
+  }
+
 
 
 }

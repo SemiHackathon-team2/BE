@@ -8,6 +8,7 @@ import com.sku.collaboration.project.domain.post.dto.response.PostResponse;
 import com.sku.collaboration.project.domain.post.entity.Post;
 import com.sku.collaboration.project.domain.post.exception.PostErrorCode;
 import com.sku.collaboration.project.domain.post.repository.PostRepository;
+import com.sku.collaboration.project.domain.post.util.GPTUtil;
 import com.sku.collaboration.project.domain.user.entity.User;
 import com.sku.collaboration.project.domain.user.exception.UserErrorCode;
 import com.sku.collaboration.project.domain.user.repository.UserRepository;
@@ -27,6 +28,7 @@ public class PostService {
   private final PostRepository postRepository;
   private final UserRepository userRepository;
   private final BoardRepository boardRepository;
+  private final GPTUtil gptUtil;
 
   @Transactional
   public PostResponse createPost(CreatePostRequest createPostRequest) { //DTO를 인자로 받아,
@@ -106,6 +108,14 @@ public class PostService {
     postRepository.delete(post);
 
     log.info("[서비스] 게시글 삭제 완료: id={}", postId);
+  }
+
+  @Transactional(readOnly = true)
+  public String summarizePost(Long postId) {
+    Post post = postRepository.findById(postId)
+        .orElseThrow(() -> new CustomException(PostErrorCode.POST_NOT_FOUND));
+
+    return gptUtil.summarize(post.getContent());
   }
 
 }
