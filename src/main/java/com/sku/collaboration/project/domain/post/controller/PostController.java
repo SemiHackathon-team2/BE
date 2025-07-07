@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController  //API요청을 처리하는 컨트롤러임을 명시!
 @RequiredArgsConstructor
-@RequestMapping("/api")  //이 클래스에서 모든 API경로 앞에 공통적으로 붙을 주소 설정!!
+@RequestMapping("/api")
 @Tag(name = "Post", description = "게시글 관련 API")
 public class PostController {
 
@@ -66,6 +66,13 @@ public class PostController {
 
     postService.deletePost(postId);
     return ResponseEntity.ok(BaseResponse.success("게시글 삭제 성공", null));
+  }
+
+  @Operation(summary = "게시글 요약", description = "GPT를 통해 게시글 내용을 요약합니다.")
+  @PostMapping("/posts/{postId}/summary")
+  public ResponseEntity<BaseResponse<String>> summarizePost(@PathVariable Long postId) {
+    String summary = postService.summarizePost(postId);
+    return ResponseEntity.ok(BaseResponse.success("요약 성공", summary));
   }
 
 
