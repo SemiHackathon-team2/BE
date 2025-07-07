@@ -1,5 +1,8 @@
-package com.sku.collaboration.project.domain.board;
+package com.sku.collaboration.project.domain.board.controller;
 
+import com.sku.collaboration.project.domain.board.dto.request.BoardResponseDto;
+import com.sku.collaboration.project.domain.board.service.BoardService;
+import com.sku.collaboration.project.domain.post.dto.response.PostResponse;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,9 +25,9 @@ public class BoardController {
         return ResponseEntity.ok(boardService.getAllBoards());
     }
 
-    @Operation(summary = "특정 게시판 게시글 전체 조회", description = "boardId에 해당하는 게시판의 게시글을 모두 조회합니다.")
-    @GetMapping("/{boardId}/posts")
-    public ResponseEntity<List<PostResponseDto>> getPostsByBoard(@PathVariable Long boardId) {
-        return ResponseEntity.ok(postService.getPostsByBoard(boardId));
-    }
+//    @Operation(summary = "특정 게시판 게시글 전체 조회", description = "boardId에 해당하는 게시판의 게시글을 모두 조회합니다.")
+//    @GetMapping("/{boardId}/posts")
+//    public ResponseEntity<List<PostResponse>> getPostsByBoard(@PathVariable Long boardId) {
+//        return ResponseEntity.ok(postService.getPostsByBoard(boardId));
+//    }
 }

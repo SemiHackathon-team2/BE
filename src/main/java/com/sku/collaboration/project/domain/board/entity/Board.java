@@ -1,4 +1,4 @@
-package com.sku.collaboration.project.domain.board;
+package com.sku.collaboration.project.domain.board.entity;
 
 import com.sku.collaboration.project.global.common.BaseTimeEntity;
 import jakarta.persistence.Entity;

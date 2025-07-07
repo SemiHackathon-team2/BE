@@ -1,5 +1,7 @@
-package com.sku.collaboration.project.domain.board;
+package com.sku.collaboration.project.domain.board.service;
 
+import com.sku.collaboration.project.domain.board.repository.BoardRepository;
+import com.sku.collaboration.project.domain.board.dto.request.BoardResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

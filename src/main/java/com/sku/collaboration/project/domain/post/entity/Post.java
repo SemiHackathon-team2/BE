@@ -1,6 +1,7 @@
 package com.sku.collaboration.project.domain.post.entity;
 
 
+import com.sku.collaboration.project.domain.board.entity.Board;
 import com.sku.collaboration.project.domain.user.entity.User;
 import com.sku.collaboration.project.global.common.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -38,13 +39,16 @@ public class Post extends BaseTimeEntity {
   private String content;  //내용
 
   @Column(name = "is_anonymous", nullable = false)
+  @Builder.Default
   private Boolean isAnonymous = false; //기본값 false
 
   @Column(name = "like_count", nullable = false)
-  private Integer likeCount;
+  @Builder.Default
+  private Integer likeCount = 0;
 
   @Column(name = "comment_count", nullable = false)
-  private Integer commentCount;
+  @Builder.Default
+  private Integer commentCount = 0;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")

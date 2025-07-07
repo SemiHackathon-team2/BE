@@ -1,5 +1,7 @@
 package com.sku.collaboration.project.domain.post.service;
 
+import com.sku.collaboration.project.domain.board.entity.Board;
+import com.sku.collaboration.project.domain.board.repository.BoardRepository;
 import com.sku.collaboration.project.domain.post.dto.request.CreatePostRequest;
 import com.sku.collaboration.project.domain.post.dto.response.PostResponse;
 import com.sku.collaboration.project.domain.post.entity.Post;
@@ -21,6 +23,7 @@ public class PostService {
 
   private final PostRepository postRepository;
   private final UserRepository userRepository;
+  private final BoardRepository boardRepository;
 
   @Transactional
   public PostResponse createPost(CreatePostRequest createPostRequest) { //DTO를 인자로 받아,
@@ -45,11 +48,15 @@ public class PostService {
     User user = userRepository.findById(createPostRequest.getUserId())
         .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
 
+    Board board = boardRepository.findById(createPostRequest.getBoardId())
+        .orElseThrow(() -> new CustomException(PostErrorCode.BOARD_NOT_FOUND));
+
     Post post = Post.builder()  //DTO -> Entity 변환 후!
         .title(createPostRequest.getTitle()) //프론트에서 보낸 "title" 값을 Post 객체의 필드로 넣는 과정
         .content(createPostRequest.getContent())
-        .isAnonymous(createPostRequest.isAnonymous())  // ✅ 익명 여부 저장
+        .isAnonymous(createPostRequest.isAnonymous())  //익명 여부 저장
         .user(user)
+        .board(board)
         .build();
     postRepository.save(post);  //Post 객체를 DB에 저장!!
 

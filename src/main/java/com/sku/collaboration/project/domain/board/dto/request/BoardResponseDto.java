@@ -1,5 +1,6 @@
-package com.sku.collaboration.project.domain.board;
+package com.sku.collaboration.project.domain.board.dto.request;
 
+import com.sku.collaboration.project.domain.board.entity.Board;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
